@@ -1,0 +1,218 @@
+:root {
+	--dark: #051923;
+	--dark-a: #212529;
+	--light: #ffffff;
+	--light-a: #7D919B;
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}
+
+#registerContainer::-webkit-scrollbar {
+	width: 30px !important;
+	/* Ancho de la barra de desplazamiento */
+}
+
+#registerContainer::-webkit-scrollbar-thumb {
+	background-color: #888;
+	/* Color del pulgar de la barra de desplazamiento */
+}
+
+
+body {
+	background-color: var(--dark-a);
+	font-weight: 300;
+	color: var(--light) !important;
+	font-family: 'League Spartan', sans-serif;
+	height: 100vh;
+
+}
+
+.bg-dark {
+	background-color: var(--dark) !important;
+}
+
+.bg-dark-x {
+	background-color: var(--dark-a) !important;
+}
+
+
+
+
+.form-control,
+.btn {
+	min-height: 3.125rem;
+	line-height: initial;
+}
+
+.img-1 {
+	background-image: url("./../img/firstImage.png");
+	background-size: cover;
+	background-position: center;
+}
+
+.img-2 {
+	background-image: url("./../img/secondImage.png");
+	background-size: cover;
+	background-position: center;
+}
+
+.img-3 {
+	background-image: url("./../img/thirdImage.png");
+	background-size: cover;
+	background-position: center;
+}
+
+h5 {
+	font-weight: bold;
+}
+
+/*input[type="file"]#formFile{
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: 1;
+}*/
+
+/*label [for=" formFile"] {
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff;
+	background-color: #106BA0;
+	display: inline-block;
+	transition: all .5s;
+	cursor: pointer;
+	padding: 15px 40px !important;
+	text-transform: uppercase;
+	width: fit-content;
+	text-align: center;
+}*/
+
+input[type="file"]::file-selector-button {
+	color: #f8f9fa;
+	background-color: var(--dark);
+	border-color: #f8f9fa;
+	padding: 5px 10px 5px 10px;
+	border-radius: 10%;
+}
+
+input[type="file"]::file-selector-button:hover {
+	background-color: #f8f9fa;
+	border: 2px solid #f8f9fa;
+	color: var(--dark);
+}
+
+.form__input[type="date"]::-webkit-calendar-picker-indicator {
+	filter: invert(1) !important;
+	border-radius: 50%;
+	padding: 4px;
+}
+
+.custom-file-input {
+	background-color: var(--dark-a) !important;
+}
+
+.colorWarning {
+	color: #B22222 !important;
+}
+
+.changePassword {
+	display: flex;
+	justify-content: center;
+}
+
+
+
+.custom-checkbox {
+	position: relative;
+	padding-left: 25px;
+	/* Espacio para el checkbox */
+	margin-bottom: 10px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.custom-checkbox input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.checkmark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 20px;
+	width: 20px;
+	background-color: #eee;
+	/* Color de fondo del checkbox */
+	border-radius: 0.2rem;
+}
+
+.custom-checkbox:hover input~.checkmark {
+	background-color: #ccc;
+	/* Color de fondo del checkbox al pasar el cursor sobre él */
+}
+
+.custom-checkbox input:checked~.checkmark {
+	background-color: #2196F3;
+	/* Color de fondo del checkbox cuando está marcado */
+}
+
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+
+.custom-checkbox input:checked~.checkmark:after {
+	display: block;
+}
+
+.custom-checkbox .checkmark:after {
+	left: 7px;
+	top: 3px;
+	width: 6px;
+	height: 12px;
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	transform: rotate(45deg);
+}
+
+.info-product-container {
+	border-radius: 20px;
+	padding: 25px;
+	border-color: #585858 !important;
+}
+
+.product-gallery-main-img {
+	height: 600px;
+	width: 100%;
+	object-fit: cover;
+}
+
+ul,
+li,
+a {
+	list-style-type: none;
+	text-decoration: none;
+	margin: 0;
+	padding: 0;
+}
+
+.container-categories {
+	padding: 2rem;
+}
+
+.container-categories li {
+	margin-left: 20px;
+	margin-bottom: 5px;
+}
+
+.modal{
+	color: #051923 !important;
+}
+
