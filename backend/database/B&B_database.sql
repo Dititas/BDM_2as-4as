@@ -58,6 +58,14 @@ CREATE TABLE `bytesandbits`.`Product`(
     FOREIGN KEY (`product_user`) REFERENCES `bytesandbits`.`User`(`user_id`)
 );
 
+CREATE TABLE `bytesandbits`.`adminMovements`(
+    `adminMovements_id`         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `adminMovements_idUser`     INT NOT NULL,
+    `adminMovements_idProduct`  INT NOT NULL
+    FOREIGN KEY (`adminMovements_idUser`) REFERENCES `bytesandbits`.`User`(`user_id`),
+    FOREIGN KEY (`adminMovements_idProduct`) REFERENCES `bytesandbits`.`Product`(`product_id`)
+);
+
 CREATE TABLE `bytesandbits`.`Image`(
     `image_id`          INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `image_content`     LONGBLOB NOT NULL,
@@ -344,29 +352,10 @@ CREATE PROCEDURE `insertUser`(
     IN _rol             VARCHAR(60)       
 )
 BEGIN
-    INSERT INTO `bytesandbits`.`User`(
-        `user_email`,    
-        `user_userName`, 
-        `user_password`, 
-        `user_name`,     
-        `user_lastName`, 
-        `user_birthDate`,
-        `user_image`,    
-        `user_gender`,
-        `user_isPublic`,
-        `user_rol`      
-    )VALUES(
-        _email,    
-        _username, 
-        _password, 
-        _name,     
-        _lastName, 
-        _birthdate,
-        _image,    
-        _gender,   
-        _isPublic, 
-        _rol      
-    );
+    INSERT INTO `bytesandbits`.`User`(`user_email`, `user_userName`, `user_password`, `user_name`, 
+    `user_lastName`, `user_birthDate`, `user_image`, `user_gender`, `user_isPublic`, `user_rol`      
+    )VALUES(_email, _username, _password, _name, _lastName, _birthdate, _image, _gender, _isPublic, _rol);
+    INSERT INTO `bytesandbits`.`Cart`(`cart_user`)VALUES(LAST_INSERT_ID());
 END $$
 DELIMITER ;
 
@@ -611,7 +600,26 @@ CREATE PROCEDURE `modifyProduct`(
     IN _user                INT
     )
 BEGIN
-    /*TERMINA EL STORED PROCEDURE DE MODIFICAR*/
+    UPDATE `bytesandbits`.`Product` SET
+        `product_name` = COALESCE(NULLIF(_name, ""), `product_name`),
+        `product_description` = COALESCE(NULLIF(_description, ""), `product_description`),
+        `product_image` = COALESCE(NULLIF(_image, ""), `product_image`),
+        `product_quotation` = `product_quotation`,
+        `product_price` = COALESCE(NULLIF(_price, NULL), `product_price`),
+        `product_quantityAvailable` = COALESCE(NULLIF(_quantityAvailable, NULL), `product_quantityAvailable`)
+    WHERE `product_id`= _id;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `approvedProduct`;
+DELIMITER $$
+CREATE PROCEDURE `approvedProduct`(
+    IN _productId   INT,
+    IN _userId      INT
+    )
+BEGIN    
+    INSERT INTO `bytesandbits`.`adminMovements`(`adminMovements_idUser`, `adminMovements_idProduct`)
+    VALUES (_userId, _productId);
 END $$
 DELIMITER ;
 
@@ -1209,6 +1217,15 @@ BEGIN
 END$$;
 DELIMITER; */
 /*----------------------------------------TRIGGERS----------------------------------------*/
+/*
+CREATE TRIGGER approveProduct
+BEFORE INSERT ON `bytesandbits`.`adminMovements`
+FOR EACHE ROW
+UPDATE `bytesandbits`.`Product` SET
+        `product_isApproved` = 1
+    WHERE `product_id` = NEW.`adminMovements_idProduct`
+*/
+
 /* CREATE TRIGGER disableProductOnZeroQuantity
 BEFORE UPDATE ON `bytesandbits`.`Product`
 FOR EACH ROW

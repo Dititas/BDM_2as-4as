@@ -4,7 +4,7 @@
             $host = "localhost";
             $db = "bytesandbits";
             $user = "root";
-            $pass = "#Orjamoon29";
+            $pass = "admin";
             try {
                 $mysqli = new mysqli($host,$user,$pass,$db);
                 if ($mysqli->connect_errno) {
