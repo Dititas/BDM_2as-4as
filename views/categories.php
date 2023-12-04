@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
     <?php
     include_once(__DIR__ . "./../backend/utils/dbConnection.php");
 
@@ -21,6 +18,8 @@
     }
     ?>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +27,8 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="../css/styles.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesDashboard.css">
+    <link rel="stylesheet" type="text/css" href="../css/stylesSidebar.css">
+    <link rel="stylesheet" type="text/css" href="../css/stylesModal.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesMyWishLists.css">
 
     <script src="https://kit.fontawesome.com/3b5032f2e6.js" crossorigin="anonymous"></script>
@@ -39,7 +40,7 @@
     <?php include_once(__DIR__ . "././sidebar.php");   ?>
     <section class="home-selection">
         <div class="home-content">
-            <i class="bx bx-menu"></i>
+            <i id="toggle-sidebar" class="bx bx-menu"></i>
             <span class="text">Categorías</span>
         </div>
     </section>
@@ -124,8 +125,8 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script type="text/javascript" src="../scripts/scriptSidebar.js"></script>
-    <script type="text/javascript" src="../scripts/scriptCategories.js"></script>
+    <script type="text/javascript" src="./../scripts/scriptSidebar.js"></script>
+    <script type="text/javascript" src="./../scripts/scriptCategories.js"></script>
 
 </body>
 

@@ -1,0 +1,23 @@
+:root {
+    --dark: #051923;
+    --dark-a: #212529;
+    --modal: #092b3c5f;
+    --light: #ffffff;
+    --light-a: #7D919B;
+}
+
+.dashboard-main{
+    padding-left: 3rem;
+}
+
+.modal {
+    background-color: var(--modal) ;
+    color: var(--light);
+    font-size: 20px;
+}
+
+
+.modal-title,
+.modal-body {
+    color: black;
+}

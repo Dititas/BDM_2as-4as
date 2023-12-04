@@ -25,11 +25,6 @@ table th {
     object-fit: contain;
 }
 
-.modal-title,
-.modal-body {
-    color: black !important;
-}
-
 .input {
     color: black !important;
 }
@@ -43,6 +38,3 @@ table>img {
     color: black;
 }
 
-.modal{
-	color: #051923 !important;
-}

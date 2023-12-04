@@ -56,7 +56,7 @@
 				<div class="px-lg-5 text-center">
 					<img src="./../img/logo.jpg" class="img-fluid" width="200" height="200">
 				</div>
-				<div class="mx-lg-4 ps-5 pe-5 " data-spy="scroll" id="registerContainer" data-target="#registerContainer" style="max-height: 500px; overflow-y: scroll;">
+				<div class="mx-lg-4 ps-5 pe-5 registerContainer" data-spy="scroll" id="registerContainer" data-target="#registerContainer">
 					<h1 class="font-weight-bold text-center mb-4">Registrarse</h1>
 					<form class="mb-5 row" method="post" action="login.php" id="registerForm" enctype="multipart/form-data">
 
