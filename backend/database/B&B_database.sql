@@ -200,8 +200,135 @@ CREATE TABLE `bytesandbits`.`Purchase`(
 );
 
 /*---------------VIEWS------------------------------------*/
+    CREATE VIEW `ProductGeneralInfoView` AS
+    SELECT 
+        p.`product_id`,
+        p.`product_name`,
+        p.`product_description`,
+        p.`product_price`,
+        p.`product_quantityAvailable`,
+        p.`product_image`
+    FROM `bytesandbits`.`Product` p
+    WHERE p.`product_isEnable` = 1;
 
-CREATE VIEW userInfoView AS
+    CREATE VIEW `ProductSpecificInfoView` AS
+    SELECT 
+        p.`product_id`,
+        p.`product_name`,
+        p.`product_description`,
+        p.`product_price`,
+        p.`product_quantityAvailable`,
+        p.`product_image`,
+        i.`image_content`,
+        v.`video_content`
+    FROM `bytesandbits`.`Product` p
+    LEFT JOIN `bytesandbits`.`Image` i ON p.`product_id` = i.`image_product`
+    LEFT JOIN `bytesandbits`.`Video` v ON p.`product_id` = v.`video_product`
+    WHERE p.`product_isEnable` = 1;
+
+    CREATE VIEW `SellerQuotationView` AS
+    SELECT
+        q.`quotation_id`,
+        q.`quotation_expirationDate`,
+        q.`quotation_specifications`,
+        q.`quotation_priceAgreed`,
+        q.`quotation_isEnable`,
+        p.`product_id`,
+        p.`product_name`,
+        p.`product_image`
+    FROM `bytesandbits`.`Quotation` q
+    JOIN `bytesandbits`.`Product` p ON q.`quotation_product` = p.`product_id`;
+
+    CREATE VIEW `BuyerQuotationView` AS
+    SELECT
+        q.`quotation_id`,
+        q.`quotation_expirationDate`,
+        q.`quotation_specifications`,
+        q.`quotation_priceAgreed`,
+        q.`quotation_isEnable`,
+        p.`product_id`,
+        p.`product_name`,
+        p.`product_image`,
+        u.`user_id`,
+        u.`user_userName`,
+        u.`user_image`
+    FROM `bytesandbits`.`Quotation` q
+    JOIN `bytesandbits`.`Product` p ON q.`quotation_product` = p.`product_id`
+    JOIN `bytesandbits`.`User` u ON q.`quotation_user` = u.`user_id`;
+
+    CREATE VIEW `CurrentProducts` AS
+    SELECT
+        p.`product_id`,
+        p.`product_name`,
+        p.`product_price`,
+        p.`product_quantityAvailable`,
+        c.`category_name`
+    FROM `bytesandbits`.`Product` p
+    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
+    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`;
+
+    -- View de Consulta Detallada de Ventas
+    CREATE VIEW `SalesDetailsView` AS
+    SELECT
+        s.`sale_id`,
+        s.`sale_date`,
+        c.`category_name`,
+        p.`product_name`,
+        COALESCE(AVG(r.`rating_score`), 0) AS average_rating,
+        p.`product_price`,
+        p.`product_stock`
+    FROM `bytesandbits`.`Sale` s
+    JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
+    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
+    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`
+    LEFT JOIN `bytesandbits`.`Rating` r ON r.`rating_product` = p.`product_id`
+    GROUP BY s.`sale_id`;
+
+    -- View de Consulta Agrupada de Ventas
+    CREATE VIEW `SalesGroupedView` AS
+    SELECT
+        MONTH(s.`sale_date`) AS month,
+        YEAR(s.`sale_date`) AS year,
+        c.`category_name`,
+        COUNT(s.`sale_id`) AS total_sales
+    FROM `bytesandbits`.`Sale` s
+    JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
+    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
+    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`
+    GROUP BY MONTH(s.`sale_date`), YEAR(s.`sale_date`), c.`category_name`;
+
+    -- View de Consulta Detallada de Compras
+    CREATE VIEW `PurchasesDetailsView` AS
+    SELECT
+        s.`sale_id`,
+        s.`sale_date`,
+        c.`category_name`,
+        p.`product_name`,
+        COALESCE(AVG(r.`rating_score`), 0) AS average_rating,
+        p.`product_price`
+    FROM `bytesandbits`.`Sale` s
+    JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
+    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
+    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`
+    LEFT JOIN `bytesandbits`.`Rating` r ON r.`rating_product` = p.`product_id`
+    GROUP BY s.`sale_id`;
+
+    -- View de Consulta Agrupada de Compras
+    CREATE VIEW `PurchasesGroupedView` AS
+    SELECT
+        MONTH(s.`sale_date`) AS month,
+        YEAR(s.`sale_date`) AS year,
+        c.`category_name`,
+        COUNT(s.`sale_id`) AS total_purchases
+    FROM `bytesandbits`.`Sale` s
+    JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
+    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
+    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`
+    GROUP BY MONTH(s.`sale_date`), YEAR(s.`sale_date`), c.`category_name`;
+
+
+
+/* CREATE VIEW userInfoView AS
 SELECT
     `user_id`,       
     `user_email`,    
@@ -327,9 +454,61 @@ CREATE VIEW ChatMessagesView AS
         p.`product_image`
     FROM `bytesandbits`.`Product` p
     JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`;
-
+ */
 /*--------------STORED PROCEDURES USER---------------------*/
-DROP PROCEDURE IF EXISTS `insertUser`;
+ROP PROCEDURE IF EXISTS `insertUser`;
+DELIMITER $$
+CREATE PROCEDURE `insertUser`(
+    IN _email           VARCHAR(60),
+    IN _username        VARCHAR(60),
+    IN _password        VARCHAR(255),
+    IN _name            VARCHAR(60),
+    IN _lastName        VARCHAR(60),
+    IN _birthdate       DATE,
+    IN _image           LONGBLOB,
+    IN _gender          VARCHAR(60),
+    IN _isPublic        TINYINT,
+    IN _rol             VARCHAR(60)       
+)
+BEGIN
+    -- Insertar el usuario
+    INSERT INTO `bytesandbits`.`User`(
+        `user_email`,    
+        `user_userName`, 
+        `user_password`, 
+        `user_name`,     
+        `user_lastName`, 
+        `user_birthDate`,
+        `user_image`,    
+        `user_gender`,
+        `user_isPublic`,
+        `user_rol`      
+    ) VALUES (
+        _email,    
+        _username, 
+        _password, 
+        _name,     
+        _lastName, 
+        _birthdate,
+        _image,    
+        _gender,   
+        _isPublic, 
+        _rol      
+    );
+
+    -- Obtener el ID del usuario recién insertado
+    SET @userId = LAST_INSERT_ID();
+
+    -- Insertar un carrito para el usuario
+    INSERT INTO `bytesandbits`.`Cart`(
+        `cart_user`
+    ) VALUES (
+        @userId
+    );
+
+END $$
+DELIMITER ;
+/* DROP PROCEDURE IF EXISTS `insertUser`;
 DELIMITER $$
 CREATE PROCEDURE `insertUser`(
     IN _email           VARCHAR(60),
@@ -368,7 +547,7 @@ BEGIN
         _rol      
     );
 END $$
-DELIMITER ;
+DELIMITER ; */
 
 DROP PROCEDURE IF EXISTS `updateUserByUser`;
 DELIMITER $$
@@ -611,11 +790,42 @@ CREATE PROCEDURE `modifyProduct`(
     IN _user                INT
     )
 BEGIN
-    /*TERMINA EL STORED PROCEDURE DE MODIFICAR*/
+    UPDATE `bytesandbits`.`Product` SET
+            `product_name` = COALESCE(NULLIF(_name, ""), `product_name`),
+            `product_description` = COALESCE(NULLIF(_description, ""), `product_description`),
+            `product_image` = COALESCE(NULLIF(_image, ""), `product_image`),
+            `product_quotation` = COALESCE(NULLIF(_quotation, NULL), `product_quotation`),
+            `product_price` = COALESCE(NULLIF(_price, NULL), `product_price`),
+            `product_quantityAvailable` = COALESCE(NULLIF(_quantityAvailable, NULL), `product_quantityAvailable`),
+            `product_isEnable` = COALESCE(NULLIF(_isEnable, NULL), `product_isEnable`)
+        WHERE `product_id` = _id;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `searchProduct`;
+DELIMITER $$
+CREATE PROCEDURE `searchProduct`( 
+    IN _search TEXT
+)
+BEGIN
+    SELECT * FROM `ProductGeneralInfoView`
+    WHERE (_search IS NULL OR 
+           `product_name` LIKE CONCAT("%", _search, "%"))
+    AND `product_isEnable` = 1;
 END $$
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `selectOneProduct`;
+DELIMITER $$
+CREATE PROCEDURE `selectOneProduct`( 
+    IN _productId INT
+)
+BEGIN
+    SELECT * FROM `ProductSpecificInfoView` WHERE `product_id` = _productId;
+END $$
+DELIMITER ;
+
+/* DROP PROCEDURE IF EXISTS `selectOneProduct`;
 DELIMITER $$
 CREATE PROCEDURE `selectOneProduct`( 
     IN _id       INT
@@ -623,7 +833,7 @@ CREATE PROCEDURE `selectOneProduct`(
 BEGIN
     SELECT * FROM ProductSpecificInfo WHERE `product_id` = _id;
 END $$
-DELIMITER ;
+DELIMITER ; */
 
 /*
 Select * from Notas where
@@ -633,7 +843,7 @@ Select * from Notas where
 Autor_Nota = id AND Eliminada = 0;
 END$$
 */
-DROP PROCEDURE IF EXISTS `searchProduct`;
+/* DROP PROCEDURE IF EXISTS `searchProduct`;
 DELIMITER $$
 CREATE PROCEDURE `searchProduct`( 
     IN _search  TEXT
@@ -642,7 +852,7 @@ BEGIN
     SELECT * FROM ProductGeneralInfo WHERE 
     (_search IS NULL OR `bytesandbits`.`Product`.`product_name` LIKE CONCAT("%", _search, "%"));
 END $$
-DELIMITER ;
+DELIMITER ; */
 
 /*-------------------------STORED PROCEDURES QUOTATION---------------------------------------*/
 DROP PROCEDURE IF EXISTS `addQuotationBuyerRequest`;
@@ -680,25 +890,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `getAllQuotationOneBuyer`;
-DELIMITER $$
-CREATE PROCEDURE `getAllQuotationOneBuyer`(
-    IN _idUser              INT    
-)
-BEGIN
-    SELECT 
-        q.`quotation_expirationDate`,
-        q.`quotation_specifications`,
-        q.`quotation_priceAgreed`,
-        q.`quotation_isEnable`,
-        p.`product_id`,
-        p.`product_name`,
-        p.`product_image`
-    FROM `bytesandbits`.`Quotation` q
-    JOIN `bytesandbits`.`Product` p ON q.`quotation_product` = p.`product_id`
-    WHERE  q.`product_user` = _idUser;
-END $$
-DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getAllQuotationOneSeller`;
 DELIMITER $$
@@ -706,21 +897,18 @@ CREATE PROCEDURE `getAllQuotationOneSeller`(
     IN _idUser              INT    
 )
 BEGIN
-    SELECT 
-       q.`quotation_expirationDate`,
-       q.`quotation_specifications`,
-       q.`quotation_priceAgreed`,
-       q.`quotation_isEnable`,
-       p.`product_id`,
-       p.`product_name`,
-       p.`product_image`,
-       u.`user_id`,
-       u.`user_userName`,
-       u.`user_image`
-    FROM `bytesandbits`.`Quotation` q
-    JOIN `bytesandbits`.`Product` p ON q.`quotation_product` = p.`product_id`
-    JOIN `bytesandbits`.`User` u ON q.`quotation_user` = u.`user_id`
-    WHERE p.`product_user` = _idUser
+    SELECT * FROM `SellerQuotationView` WHERE `product_user` = _idUser;
+END $$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getAllQuotationOneBuyer`;
+DELIMITER $$
+CREATE PROCEDURE `getAllQuotationOneBuyer`(
+    IN _idUser              INT    
+)
+BEGIN
+    SELECT * FROM `BuyerQuotationView` WHERE `product_user` = _idUser    
     GROUP BY u.`user_id`, p.`product_id`;
 END $$
 DELIMITER ;
@@ -993,19 +1181,6 @@ END $$
 DELIMITER ;
 
 /*------------------------------STORED PROCEDURE CART---------------------*/
-DROP PROCEDURE IF EXISTS `addCart`;
-DELIMITER $$
-CREATE PROCEDURE `addCart`(
-    IN _idUser       INT
-)
-BEGIN
-    INSERT INTO `bytesandbits`.`Cart`(
-        `cart_user`
-    )VALUES(
-        _idUser
-    );
-END $$
-DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `addProductInCart`;
 DELIMITER $$
@@ -1149,7 +1324,123 @@ END $$
 DELIMITER ;
 
 /*---------------------------------STORED PROCEDURES COMPRA Y VENTA-------------------------*/
-DROP PROCEDURE IF EXISTS `addSale`;
+-- Stored Procedure para Ventas y Compras
+DROP PROCEDURE IF EXISTS `addTransaction`;
+DELIMITER $$
+CREATE PROCEDURE `addTransaction`(
+    IN _productId INT,
+    IN _sellerId INT,
+    IN _buyerId INT
+)
+BEGIN    
+        INSERT INTO `bytesandbits`.`Sale`(`sale_product`, `sale_seller`) VALUES (_productId, _sellerId);   
+        INSERT INTO `bytesandbits`.`Purchase`(`purchase_product`, `purchase_buyer`) VALUES (_productId, _buyerId);
+    
+END $$
+DELIMITER ;
+
+-- Consulta Detallada de Ventas para Vendedores
+DROP PROCEDURE IF EXISTS `GetSalesDetails`;
+DELIMITER $$
+-- Stored Procedure de Consulta Detallada de Ventas
+CREATE PROCEDURE `GetSalesDetails`(
+    IN _idSeller        INT
+    IN _startDate       DATE,
+    IN _endDate         DATE,
+    IN _categoryFilter  INT
+)
+BEGIN
+    SELECT *
+    FROM SalesDetailsView
+    WHERE
+        `sale_seller` = _idSeller AND
+        (_startDate IS NULL OR `sale_date` >= _startDate)
+        AND (_endDate IS NULL OR `sale_date` <= _endDate)
+        AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
+END;
+DELIMITER ;
+
+-- Consulta Agrupada de Ventas para Vendedores
+DROP PROCEDURE IF EXISTS `GetSalesGrouped`;
+DELIMITER $$
+-- Stored Procedure de Consulta Agrupada de Ventas
+CREATE OR REPLACE PROCEDURE `GetSalesGrouped`(
+    IN _idSeller        INT
+    IN _startDate       DATE,
+    IN _endDate         DATE,
+    IN _categoryFilter  INT
+)
+BEGIN
+    SELECT *
+    FROM SalesGroupedView
+    WHERE
+        `sale_seller` = _idSeller AND
+        (_startDate IS NULL OR `sale_date` >= _startDate)
+        AND (_endDate IS NULL OR `sale_date` <= _endDate)
+        AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
+END;
+DELIMITER ;
+
+-- Consulta Detallada de Compras para Compradores
+DROP PROCEDURE IF EXISTS `GetPurchasesDetails`;
+DELIMITER $$
+-- Stored Procedure de Consulta Detallada de Compras
+CREATE PROCEDURE `GetPurchasesDetails`(
+    IN _idBuyer         INT,
+    IN _startDate       DATE,
+    IN _endDate         DATE,
+    IN _categoryFilter  INT
+)
+BEGIN
+    SELECT *
+    FROM PurchasesDetailsView
+    WHERE
+        `purchase_buyer` = _idBuyer AND
+        (_startDate IS NULL OR `sale_date` >= _startDate)
+        AND (_endDate IS NULL OR `sale_date` <= _endDate)
+        AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
+END;
+DELIMITER ;
+
+-- Consulta Agrupada de Compras para Compradores
+DROP PROCEDURE IF EXISTS `GetPurchasesGrouped`;
+DELIMITER $$
+-- Stored Procedure de Consulta Agrupada de Compras
+CREATE OR REPLACE PROCEDURE `GetPurchasesGrouped`(
+    IN _idBuyer         INT,
+    IN _startDate       DATE,
+    IN _endDate         DATE,
+    IN _categoryFilter  INT
+)
+BEGIN
+    SELECT *
+    FROM PurchasesGroupedView
+    WHERE
+        `purchase_buyer` = _idBuyer AND
+        (_startDate IS NULL OR `sale_date` >= _startDate)
+        AND (_endDate IS NULL OR `sale_date` <= _endDate)
+        AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
+END;
+/* CREATE PROCEDURE `getPurchasesGroupedByMonthYearForBuyer`(
+    IN _buyerId INT
+)
+BEGIN
+    SELECT
+        MONTH(s.`sale_date`) AS month,
+        YEAR(s.`sale_date`) AS year,
+        c.`category_name`,
+        COUNT(s.`sale_id`) AS total_purchases
+    FROM `bytesandbits`.`Sale` s
+    JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
+    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
+    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`
+    WHERE s.`sale_buyer` = _buyerId
+    GROUP BY MONTH(s.`sale_date`), YEAR(s.`sale_date`), c.`category_name`
+    ORDER BY year DESC, month DESC, total_purchases DESC;
+END $$ */
+DELIMITER ;
+
+/* DROP PROCEDURE IF EXISTS `addSale`;
 DELIMITER $$
 CREATE PROCEDURE `addSale`(
     IN _productId INT,
@@ -1181,7 +1472,7 @@ BEGIN
         _buyerId
     );
 END $$
-DELIMITER ;
+DELIMITER ; */
 
 
 /*----------------------------------FUNCIONES--------------------------------------------*/
