@@ -3,18 +3,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require_once "../utils/dbConnection.php";
     require_once "../model/category.php";
 
-    if (isset($_POST['name']) && isset($_POST['description'])) {
+    if (
+        isset($_POST['id']) &&
+        isset($_POST['name']) &&
+        isset($_POST['description'])
+    ) {
+        $id = $_POST['id'];
         $name = $_POST['name'];
         $description = $_POST['description'];
-        session_start();
-        $loggedUser = $_SESSION['AUTH'] ?? null;
-
+        $isEnable = 1;
         $mysqli = dbConnection::connect();
-        $newCategory = new Category();
-        if ($newCategory->addCategory($mysqli, $name, $description, $loggedUser['user_id'])) {
-            $json_response = ["success" => true, "msg" => "Categoría agregada con éxito"];
+        $Category = new Category();
+        if ($Category->modifyCategory($mysqli, $id, $name, $description, $isEnable)) {
+            $json_response = ["success" => true, "msg" => "Categoría modificada con éxito"];
         } else {
-            $json_response = ["success" => false, "msg" => "Error al agregar la categoría"];
+            $json_response = ["success" => false, "msg" => "Error al modificar la categoría"];
         }
 
         header('Content-Type: application/json');

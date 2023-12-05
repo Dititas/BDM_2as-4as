@@ -6,12 +6,16 @@
     --light-a: #7D919B;
 }
 
-.dashboard-main{
+body {
+    background-color: var(--dark-a);
+}
+
+.dashboard-main {
     padding-left: 3rem;
 }
 
 .modal {
-    background-color: var(--modal) ;
+    background-color: var(--modal);
     color: var(--light);
     font-size: 20px;
 }
@@ -20,4 +24,28 @@
 .modal-title,
 .modal-body {
     color: black;
+}
+
+.category-name {
+    font-size: 22px;
+}
+
+.category-description {
+    font-size: 14px;
+}
+
+.bx {
+    color: var(--light);
+}
+
+a {
+    list-style-type: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bx:hover,
+td>a:hover {
+    color: var(--light-a);
 }

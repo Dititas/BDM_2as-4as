@@ -25,7 +25,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;600&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="../css/styles.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesDashboard.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesSidebar.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesModal.css">
@@ -55,16 +54,18 @@
         </section>
         <section class="container flex-column container-categories">
 
-            <ul class="column-list" id="allCategories">
-                <li><a href="#">Sistemas de sonido para el hogar</a>
-                    <button class="bg-transparent border-0 ms-3">
-                        <i class='bx bxs-pencil icon-large'></i>
-                    </button>
-                    <button class="bg-transparent border-0">
-                        <i class='bx bxs-trash icon-large'></i>
-                    </button>
-                </li>
-            </ul>
+        <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="allCategories">
+                    
+                </tbody>
+            </table>
             <hr>
         </section>
 
@@ -104,6 +105,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="editWLModalLabel">Editar Categoría</h5>
                 </div>
+                <span id="editCategoryID" hidden></span>
                 <form method="post" action="" id="editCategoryForm" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-group mb-2">
