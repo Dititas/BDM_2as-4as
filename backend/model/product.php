@@ -56,7 +56,7 @@ class Product
 
     public function insertVideo($_mysqli, $_video, $_product)
     {
-        $query = "CALL insertImage(?,?);";
+        $query = "CALL insertVideo(?,?);";
         try {
             $stmt = $_mysqli->prepare($query);
             $stmt->bind_param("ss", $_video, $_product); // Enlaza los parámetros con bind_param
@@ -70,6 +70,25 @@ class Product
         }
         return false;
     }
+
+    public function modifyProduct($_mysqli, $_name, $_description, $_image, $_quotation, $_price, $_quantityAvailable, $_isEnable, $_user)
+    {
+        $query = "CALL modifyProduct(?, ?, ?, ?, ?, ?, ?, ?);";
+        try {
+            $stmt = $_mysqli->prepare($query);
+            $stmt->bind_param("ssbiiiiii", $_name, $_description, $_image, $_quotation, $_price, $_quantityAvailable, $_isEnable, $_user);
+            $stmt->execute();
+            $stmt->close();
+            return true;
+        } catch (Exception $e) {
+            $response = (object)array("status" => 500, "message" => $e->getMessage());
+            echo json_encode($response);
+            return false;
+        }
+        return false;
+    }
+
+
 
     public function selectOneProduct($_mysqli, $_id)
     {

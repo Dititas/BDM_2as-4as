@@ -833,35 +833,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-/* DROP PROCEDURE IF EXISTS `selectOneProduct`;
-DELIMITER $$
-CREATE PROCEDURE `selectOneProduct`( 
-    IN _id       INT
-    )
-BEGIN
-    SELECT * FROM ProductSpecificInfo WHERE `product_id` = _id;
-END $$
-DELIMITER ; */
-
-/*
-Select * from Notas where
-(_Nota IS NULL OR Nota LIKE CONCAT("%",_Nota,"%")) AND
-(_Hashtag IS NULL OR Nota REGEXP CONCAT("#", _Hashtag, "(($)|( ))")) AND
-((_FechaInicio IS NULL AND _FechaFinal IS NULL) OR Fecha_Creacion between _FechaInicio AND _FechaFinal) AND
-Autor_Nota = id AND Eliminada = 0;
-END$$
-*/
-/* DROP PROCEDURE IF EXISTS `searchProduct`;
-DELIMITER $$
-CREATE PROCEDURE `searchProduct`( 
-    IN _search  TEXT
-    )
-BEGIN
-    SELECT * FROM ProductGeneralInfo WHERE 
-    (_search IS NULL OR `bytesandbits`.`Product`.`product_name` LIKE CONCAT("%", _search, "%"));
-END $$
-DELIMITER ; */
-
 /*-------------------------STORED PROCEDURES QUOTATION---------------------------------------*/
 DROP PROCEDURE IF EXISTS `addQuotationBuyerRequest`;
 DELIMITER $$
@@ -1332,7 +1303,6 @@ END $$
 DELIMITER ;
 
 /*---------------------------------STORED PROCEDURES COMPRA Y VENTA-------------------------*/
--- Stored Procedure para Ventas y Compras
 DROP PROCEDURE IF EXISTS `addTransaction`;
 DELIMITER $$
 CREATE PROCEDURE `addTransaction`(
@@ -1459,6 +1429,32 @@ DELIMITER ; */
 
 
 /*----------------------------------FUNCIONES--------------------------------------------*/
+
+DELIMITER $$
+CREATE FUNCTION averageProductRatings(_productId INT) RETURNS DECIMAL
+READS SQL DATA
+BEGIN
+    DECLARE avgRating DECIMAL;
+    SELECT AVG(`rating_score`) INTO avgRating
+    FROM `bytesandbits`.`Rating`
+    WHERE `rating_product` = _productId;
+    RETURN COALESCE(avgRating, 0);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE FUNCTION productInCart(_userId INT, _productId INT) RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    DECLARE isInCart BOOLEAN;
+    SELECT EXISTS (
+        SELECT 1
+        FROM `bytesandbits`.`Cart_Item` ci
+        WHERE ci.`cartItem_user` = _userId AND ci.`cartItem_product` = _productId AND ci.`cartItem_isEnable` = 1
+    ) INTO isInCart;
+    RETURN isInCart;
+END $$
+DELIMITER ;
 /* DELIMITER $$
 CREATE FUNCTION averageProductRatings(_productId INT) RETURNS DECIMAL
 BEGIN
@@ -1483,7 +1479,38 @@ BEGIN
 END$$;
 DELIMITER; */
 /*----------------------------------------TRIGGERS----------------------------------------*/
-/* CREATE TRIGGER disableProductOnZeroQuantity
+
+CREATE TRIGGER approveProduct
+BEFORE INSERT ON `bytesandbits`.`adminMovements`
+FOR EACH ROW
+UPDATE `bytesandbits`.`Product` SET
+        `product_isApproved` = 1
+    WHERE `product_id` = NEW.`adminMovements_idProduct`;
+    
+CREATE TRIGGER disableProductOnZeroQuantity
+BEFORE UPDATE ON `bytesandbits`.`Product`
+FOR EACH ROW
+SET NEW.`product_isEnable` = IF(NEW.`product_quantityAvailable` > 0, 1, 0);
+
+CREATE TRIGGER closeConversationOnSale
+AFTER INSERT ON `bytesandbits`.`Sale`
+FOR EACH ROW
+    UPDATE `bytesandbits`.`Conversation`
+    SET `conversation_isEnable` = 0
+    WHERE `conversation_product` = NEW.`sale_product`;
+
+    
+    
+/* 
+
+CREATE TRIGGER approveProduct
+BEFORE INSERT ON `bytesandbits`.`adminMovements`
+FOR EACH ROW
+UPDATE `bytesandbits`.`Product` SET
+        `product_isApproved` = 1
+    WHERE `product_id` = NEW.`adminMovements_idProduct`;
+    
+CREATE TRIGGER disableProductOnZeroQuantity
 BEFORE UPDATE ON `bytesandbits`.`Product`
 FOR EACH ROW
 SET NEW.`product_isEnable` = IF(NEW.`product_quantityAvailable` > 0, 1, 0);

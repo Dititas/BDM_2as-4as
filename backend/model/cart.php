@@ -1,21 +1,6 @@
 <?php
 class Cart{
-    public function addCart($_mysqli, $_idUser){
-        $query = "CALL addCart(?);";
-        try {
-            $stmt = $_mysqli->prepare($query);
-            $stmt->bind_param("s", $_idUser); // Enlaza los parámetros con bind_param
-            $stmt->execute(); // No se pasan argumentos a execute
-            $stmt->close();
-            return true;
-        } catch (Exception $e) {
-            $response = (object)array("status" => 500, "message" => $e->getMessage());
-            echo json_encode($response);
-            return false;
-        }
-        return false;
-    }
-
+    
     public function addProductInCart($_mysqli, $_quantity, $_product, $_cart){
         $query = "CALL addProductInCart(?,?,?);";
         try {
