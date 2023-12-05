@@ -176,4 +176,26 @@ class Product
             return null;
         }
     }
+
+    public function getAllProducts($_mysqli){
+        $query = "CALL getAllProducts();";
+        try {
+            $stmt = $_mysqli->prepare($query);
+            $stmt->execute(); // No se pasan argumentos a execute
+            $result = $stmt->get_result();
+            $stmt->close();
+            $products = array();
+            while ($row = $result->fetch_assoc()) {
+                $row['imagen'] = base64_encode($row['imagen_codificada']);
+                unset($row['imagen_codificada']);
+                $products[] = $row;
+            }            
+            return $products;
+        } catch (Exception $e) {
+            $response = (object)array("status" => 500, "message" => $e->getMessage());
+            echo json_encode($response);
+            return null;
+        }
+        return null;
+    }
 }

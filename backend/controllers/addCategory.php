@@ -3,7 +3,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require_once "../utils/dbConnection.php";
     require_once "../model/category.php";
 
-    if (isset($_POST['name']) && isset($_POST['description']) ) {
+    if (isset($_POST['name']) && isset($_POST['description'])) {
         $name = $_POST['name'];
         $description = $_POST['description'];
         session_start();
@@ -27,4 +27,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 }
-?>

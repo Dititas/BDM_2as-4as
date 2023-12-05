@@ -50,7 +50,7 @@
 </head>
 
 <body>
-<?php include_once(__DIR__ . "././sidebar.php");   ?>
+	<?php include_once(__DIR__ . "././sidebar.php");   ?>
 
 
 	<section class="home-selection">
@@ -64,81 +64,6 @@
 			<h2>Últimos Productos</h2>
 			<div id="carouselLastProducts" class="carousel" data-ride="carousel">
 				<div class="carousel-inner">
-					<div class="carousel-item active">
-						<div class="card bg-dark">
-							<div class="img-wrapper">
-								<img src="./img/audifonos.jfif" class="d-block w-100" alt="Imagen del producto 1">
-							</div>
-							<div class="card-body">
-								<h5 class="card-title">Audifonos</h5>
-								<p class="card-text">Alta calidad de audio</p>
-							</div>
-						</div>
-					</div>
-					<div class="carousel-item">
-						<div class="card bg-dark">
-							<div class="img-wrapper">
-								<img src="./img/audifonos2.jfif" class="d-block w-100" alt="Imagen del producto 2">
-							</div>
-
-							<div class="card-body">
-								<h5 class="card-title">Audífonos bluetooth</h5>
-								<p class="card-text">Dura la pila hasta 30 horas</p>
-							</div>
-						</div>
-					</div>
-					<div class="carousel-item">
-						<div class="card bg-dark">
-							<div class="img-wrapper">
-								<img src="./img/audifonos2.jfif" class="d-block w-100" alt="Imagen del producto 2">
-							</div>
-
-							<div class="card-body">
-								<h5 class="card-title">Audífonos bluetooth</h5>
-								<p class="card-text">Dura la pila hasta 30 horas</p>
-							</div>
-						</div>
-					</div>
-					<div class="carousel-item">
-						<div class="card bg-dark">
-							<div class="img-wrapper">
-								<img src="./img/audifonos2.jfif" class="d-block w-100" alt="Imagen del producto 2">
-							</div>
-
-							<div class="card-body">
-								<h5 class="card-title">Audífonos bluetooth</h5>
-								<p class="card-text">Dura la pila hasta 30 horas</p>
-							</div>
-						</div>
-					</div>
-					<div class="carousel-item">
-						<div class="card bg-dark">
-							<div class="img-wrapper">
-								<img src="./img/keyboard2.jfif" class="d-block w-100" alt="Imagen del producto 3">
-							</div>
-							<div class="card-body">
-								<h5 class="card-title">Teclado</h5>
-								<p class="card-text">Teclado para computadora</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="carousel-item">
-						<div class="card bg-dark">
-							<div class="img-wrapper">
-								<img src="./img/cargador.jfif" class="card-img-top img-fluid" alt="Imagen del producto 3">
-							</div>
-
-							<div class="card-body">
-								<h5 class="card-title">Cargador</h5>
-								<p class="card-text">Cargador de laptop Lenovo</p>
-							</div>
-						</div>
-					</div>
-
-
-
-
 				</div>
 				<button class="carousel-control-prev" type="button" data-bs-target="#carouselLastProducts" data-bs-slide="prev">
 					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -149,6 +74,7 @@
 					<span class="visually-hidden">Next</span>
 				</button>
 			</div>
+
 			<br>
 			<h2>Recomendados</h2>
 			<div id="carouselRecommended" class="carousel" data-ride="carousel">

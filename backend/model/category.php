@@ -47,6 +47,21 @@ class Category{
         }
         return false;
     }
+    public function deleteCategory($_mysqli, $_id, $_name, $_description, $_isEnable){
+        $query = "CALL modifyCategory(?,?,?,?);";
+        try {
+            $stmt = $_mysqli->prepare($query);
+            $stmt->bind_param("ssss", $_id, $_name, $_description, $_isEnable); // Enlaza los parámetros con bind_param
+            $stmt->execute(); // No se pasan argumentos a execute
+            $stmt->close();
+            return true;
+        } catch (Exception $e) {
+            $response = (object)array("status" => 500, "message" => $e->getMessage());
+            echo json_encode($response);
+            return false;
+        }
+        return false;
+    }
 
     public function getAllCategories($_mysqli){
         $query = "CALL getAllCategories();";
