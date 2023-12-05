@@ -199,6 +199,14 @@ CREATE TABLE `bytesandbits`.`Purchase`(
     FOREIGN KEY (`purchase_buyer`) REFERENCES `bytesandbits`.`User`(`user_id`)
 );
 
+CREATE TABLE `bytesandbits`.`adminMovements`(
+    `adminMovements_id`         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `adminMovements_idUser`     INT NOT NULL,
+    `adminMovements_idProduct`  INT NOT NULL,
+    FOREIGN KEY (`adminMovements_idUser`) REFERENCES `bytesandbits`.`User`(`user_id`),
+    FOREIGN KEY (`adminMovements_idProduct`) REFERENCES `bytesandbits`.`Product`(`product_id`)
+);
+
 /*---------------VIEWS------------------------------------*/
     CREATE VIEW `ProductGeneralInfoView` AS
     SELECT 
@@ -456,7 +464,7 @@ CREATE VIEW ChatMessagesView AS
     JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`;
  */
 /*--------------STORED PROCEDURES USER---------------------*/
-ROP PROCEDURE IF EXISTS `insertUser`;
+DROP PROCEDURE IF EXISTS `insertUser`;
 DELIMITER $$
 CREATE PROCEDURE `insertUser`(
     IN _email           VARCHAR(60),
@@ -1339,12 +1347,10 @@ BEGIN
 END $$
 DELIMITER ;
 
--- Consulta Detallada de Ventas para Vendedores
 DROP PROCEDURE IF EXISTS `GetSalesDetails`;
 DELIMITER $$
--- Stored Procedure de Consulta Detallada de Ventas
 CREATE PROCEDURE `GetSalesDetails`(
-    IN _idSeller        INT
+    IN _idSeller        INT,
     IN _startDate       DATE,
     IN _endDate         DATE,
     IN _categoryFilter  INT
@@ -1357,15 +1363,13 @@ BEGIN
         (_startDate IS NULL OR `sale_date` >= _startDate)
         AND (_endDate IS NULL OR `sale_date` <= _endDate)
         AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
-END;
+END$$
 DELIMITER ;
 
--- Consulta Agrupada de Ventas para Vendedores
 DROP PROCEDURE IF EXISTS `GetSalesGrouped`;
 DELIMITER $$
--- Stored Procedure de Consulta Agrupada de Ventas
-CREATE OR REPLACE PROCEDURE `GetSalesGrouped`(
-    IN _idSeller        INT
+CREATE PROCEDURE `GetSalesGrouped`(
+    IN _idSeller        INT,
     IN _startDate       DATE,
     IN _endDate         DATE,
     IN _categoryFilter  INT
@@ -1378,13 +1382,11 @@ BEGIN
         (_startDate IS NULL OR `sale_date` >= _startDate)
         AND (_endDate IS NULL OR `sale_date` <= _endDate)
         AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
-END;
+END$$
 DELIMITER ;
 
--- Consulta Detallada de Compras para Compradores
 DROP PROCEDURE IF EXISTS `GetPurchasesDetails`;
 DELIMITER $$
--- Stored Procedure de Consulta Detallada de Compras
 CREATE PROCEDURE `GetPurchasesDetails`(
     IN _idBuyer         INT,
     IN _startDate       DATE,
@@ -1399,14 +1401,12 @@ BEGIN
         (_startDate IS NULL OR `sale_date` >= _startDate)
         AND (_endDate IS NULL OR `sale_date` <= _endDate)
         AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
-END;
+END $$
 DELIMITER ;
 
--- Consulta Agrupada de Compras para Compradores
 DROP PROCEDURE IF EXISTS `GetPurchasesGrouped`;
 DELIMITER $$
--- Stored Procedure de Consulta Agrupada de Compras
-CREATE OR REPLACE PROCEDURE `GetPurchasesGrouped`(
+CREATE PROCEDURE `GetPurchasesGrouped`(
     IN _idBuyer         INT,
     IN _startDate       DATE,
     IN _endDate         DATE,
@@ -1420,24 +1420,7 @@ BEGIN
         (_startDate IS NULL OR `sale_date` >= _startDate)
         AND (_endDate IS NULL OR `sale_date` <= _endDate)
         AND (_categoryFilter IS NULL OR `category_id` = _categoryFilter);
-END;
-/* CREATE PROCEDURE `getPurchasesGroupedByMonthYearForBuyer`(
-    IN _buyerId INT
-)
-BEGIN
-    SELECT
-        MONTH(s.`sale_date`) AS month,
-        YEAR(s.`sale_date`) AS year,
-        c.`category_name`,
-        COUNT(s.`sale_id`) AS total_purchases
-    FROM `bytesandbits`.`Sale` s
-    JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
-    JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`
-    JOIN `bytesandbits`.`Category` c ON cp.`categoryProduct_category` = c.`category_id`
-    WHERE s.`sale_buyer` = _buyerId
-    GROUP BY MONTH(s.`sale_date`), YEAR(s.`sale_date`), c.`category_name`
-    ORDER BY year DESC, month DESC, total_purchases DESC;
-END $$ */
+END$$
 DELIMITER ;
 
 /* DROP PROCEDURE IF EXISTS `addSale`;
@@ -1512,5 +1495,7 @@ BEGIN
     UPDATE `bytesandbits`.`Conversation`
     SET `conversation_isEnable` = 0
     WHERE `conversation_product` = NEW.`sale_product`;
-END; */
+END; 
+
+*/
 
