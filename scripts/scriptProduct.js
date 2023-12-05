@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const formAddWL = document.getElementById('addProductForm');
         formAddWL.onsubmit = function (e) {
-            console.log(name.value,description.value,image.files[0],price.value,quantityAvailable.value,quotation.checked ? 1 : 0);
+            console.log(name.value, description.value, image.files[0], price.value, quantityAvailable.value, quotation.checked ? 1 : 0);
             e.preventDefault();
             const formData = new FormData();
             formData.append('name', name.value);
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function confirmDelete(listName) {
     if (confirm('¿Estás seguro de que quieres eliminar la lista ' + listName + '?')) {
-        // Aquí puedes poner la lógica para eliminar la lista
+        // lógica para eliminar la lista
         alert('Lista eliminada');
     }
 }
@@ -136,10 +136,10 @@ function validatePicture() {
     }
 }
 
-function toggleInput(){
-	if(quotation.checked){
-		return true;
-	}else{
-		return false;
-	}
+function toggleInput() {
+    if (quotation.checked) {
+        return true;
+    } else {
+        return false;
+    }
 }

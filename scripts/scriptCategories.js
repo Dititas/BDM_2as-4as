@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     })();
 
-  
+
 });
 var btnConfirmEdit = document.getElementById('editCategoryButton');
 var btnCancelEdit = document.querySelector('#editWLModal .btn-secondary');
@@ -66,43 +66,44 @@ var btnCancelEdit = document.querySelector('#editWLModal .btn-secondary');
 btnConfirmEdit.addEventListener('click', function () {
     const id = document.getElementById('editCategoryID').innerHTML;
     const name = document.getElementById('editCategoryName').value;
-   
+
     const description = document.getElementById('editCategoryDescription').value;
-    
+
     modifyCategory(id, name, description);
 });
+
 function confirmDelete(categoryName, categoryId, description) {
     if (confirm('¿Estás seguro de que quieres eliminar la categoría ' + categoryName + '?')) {
         var xhr = new XMLHttpRequest();
-    xhr.open('POST', '../backend/controllers/deleteCategory.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.open('POST', '../backend/controllers/deleteCategory.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            if (xhr.status == 200) {
-                if (xhr.response) {
-                    try {
-                        let res = JSON.parse(xhr.response);
-                        console.log(xhr);
-                        if (res.success !== true) {
-                            alert(res.msg);
-                        } else {
-                            alert(res.msg);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                if (xhr.status == 200) {
+                    if (xhr.response) {
+                        try {
+                            let res = JSON.parse(xhr.response);
+                            console.log(xhr);
+                            if (res.success !== true) {
+                                alert(res.msg);
+                            } else {
+                                alert(res.msg);
+                            }
+                        } catch (error) {
+                            console.error("Error parsing JSON: ", error);
                         }
-                    } catch (error) {
-                        console.error("Error parsing JSON: ", error);
+                    } else {
+                        console.error("Server response is empty");
                     }
                 } else {
-                    console.error("Server response is empty");
+                    console.error("Error in AJAX request: " + xhr.status);
                 }
-            } else {
-                console.error("Error in AJAX request: " + xhr.status);
             }
         }
-    }
 
-    var data = 'id=' + encodeURIComponent(categoryId) + '&name=' + encodeURIComponent(categoryName) + '&description=' + encodeURIComponent(description);
-    xhr.send(data);
+        var data = 'id=' + encodeURIComponent(categoryId) + '&name=' + encodeURIComponent(categoryName) + '&description=' + encodeURIComponent(description);
+        xhr.send(data);
     }
 }
 
@@ -245,22 +246,6 @@ document.addEventListener("DOMContentLoaded", function () {
     getAllCategories();
 });
 
-function loadCategories() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var response = JSON.parse(xhr.responseText);
-            if (response.success) {
-                displayCategories(response.categories, "allCategories"); // Pasar el id de la tabla como segundo argumento
-            } else {
-                console.error("Error al cargar las categorías");
-            }
-        }
-    };
-
-    xhr.open("GET", '../backend/controllers/getAllCategories.php', true);
-    xhr.send();
-}
 
 function displayCategories(categories, parentTableId) {
     var table = document.getElementById(parentTableId);
@@ -289,7 +274,7 @@ function displayCategories(categories, parentTableId) {
         });
 
         var deleteButton = createButton(function () {
-            confirmDelete(category.category_name,category.category_id,category.category_description);
+            confirmDelete(category.category_name, category.category_id, category.category_description);
         });
 
         var editIcon = createIcon(["bx", "bxs-pencil", "icon-large"]);
@@ -303,8 +288,7 @@ function displayCategories(categories, parentTableId) {
     });
 }
 
-// Llamada inicial
-loadCategories();
+
 
 function createButton(clickHandler) {
     var button = document.createElement("button");
