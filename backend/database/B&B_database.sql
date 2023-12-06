@@ -284,7 +284,7 @@ CREATE TABLE `bytesandbits`.`adminMovements`(
         p.`product_name`,
         COALESCE(AVG(r.`rating_score`), 0) AS average_rating,
         p.`product_price`,
-        p.`product_stock`
+        p.`product_quantityAvailable`
     FROM `bytesandbits`.`Sale` s
     JOIN `bytesandbits`.`Product` p ON s.`sale_product` = p.`product_id`
     JOIN `bytesandbits`.`Category_Product` cp ON p.`product_id` = cp.`categoryProduct_product`

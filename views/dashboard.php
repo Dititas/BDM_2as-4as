@@ -3,7 +3,6 @@
 
 <head>
     <?php
-
     $userInfo;
     $userName;
     $userRole;
@@ -66,7 +65,7 @@
                 <div class="carousel-inner">
                     <?php
                     foreach ($_SESSION['last_products'] as $product) {
-                        ?>
+                    ?>
                         <div class="carousel-item">
                             <div class="card bg-dark">
                                 <div class="img-wrapper">
@@ -79,8 +78,8 @@
                             </div>
                         </div>
                     <?php
-                }
-                ?>
+                    }
+                    ?>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselLastProducts" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -97,7 +96,7 @@
                 <div class="carousel-inner">
                     <?php
                     foreach ($_SESSION['recommended_products'] as $product) {
-                        ?>
+                    ?>
                         <div class="carousel-item">
                             <div class="card bg-dark">
                                 <div class="img-wrapper">
@@ -110,8 +109,8 @@
                             </div>
                         </div>
                     <?php
-                }
-                ?>
+                    }
+                    ?>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselRecommended" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -128,7 +127,7 @@
                 <div class="carousel-inner">
                     <?php
                     foreach ($_SESSION['most_sold_products'] as $product) {
-                        ?>
+                    ?>
                         <div class="carousel-item">
                             <div class="card bg-dark">
                                 <div class="img-wrapper">
@@ -141,8 +140,8 @@
                             </div>
                         </div>
                     <?php
-                }
-                ?>
+                    }
+                    ?>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselMostSelled" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

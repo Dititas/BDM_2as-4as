@@ -5,7 +5,7 @@ $(document).ready(function () {
     initCarousel("carouselMostSelled");
 
     // Obtener productos después de cargar la página
-    getAllProducts();
+    //getAllProducts();
 });
 
 function initCarousel(carouselId) {
@@ -43,7 +43,7 @@ function initCarousel(carouselId) {
     });
 }
 
-
+/*
 function getAllProducts() {
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', './backend/controllers/getAllProducts.php', true);
@@ -130,4 +130,58 @@ function getAllProducts() {
 	}
 
 	xhr.send();
-}
+}*/
+
+$(document).ready(function () {
+	// Realizar la petición al controlador PHP
+	$.ajax({
+		type: "GET",
+		url: "backend/controllers/getDashboard.php",
+		dataType: "json",
+		success: function (data) {
+			// Actualizar el contenido de los carousels con los datos obtenidos
+console.log(data);
+			// Últimos Productos
+			updateCarousel('carouselLastProducts', data.last_products);
+
+			// Recomendados
+			updateCarousel('carouselRecommended', data.recommended_products);
+
+			// Más Vendidos
+			updateCarousel('carouselMostSelled', data.most_sold_products);
+		},
+		error: function () {
+			// Manejar errores si es necesario
+			console.error("Error al obtener datos desde el servidor.");
+		}
+	});
+
+	function updateCarousel(carouselId, products) {
+		var carousel = $("#" + carouselId + " .carousel-inner");
+
+		// Limpiar el contenido actual del carousel
+		carousel.empty();
+
+		// Agregar los nuevos elementos al carousel
+		for (var i = 0; i < products.length; i++) {
+			var product = products[i];
+
+			var carouselItem = $('<div class="carousel-item">' +
+				'<div class="card bg-dark">' +
+				'<div class="img-wrapper">' +
+				'<img src="data:image/jpeg;base64,' + product.product_image + '" class="card-img-top img-fluid" alt="Imagen del producto">' +
+				'</div>' +
+				'<div class="card-body">' +
+				'<h5 class="card-title">' + product.product_name + '</h5>' +
+				'<p class="card-text">' + product.product_description + '</p>' +
+				'</div>' +
+				'</div>' +
+				'</div>');
+
+			carousel.append(carouselItem);
+		}
+
+		// Activar el primer elemento del carousel
+		carousel.children('.carousel-item').first().addClass('active');
+	}
+});
