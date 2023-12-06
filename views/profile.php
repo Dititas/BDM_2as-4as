@@ -4,15 +4,32 @@
 <head>
 
 	<?php
-	session_start();
-	if (isset($_SESSION["AUTH"])) {
-		$userInfo = $_SESSION["AUTH"];
-		$perfil = 'vendedor';
-		$imagenCodificada = base64_encode($userInfo["user_image"]);
-		$urlImagen = 'data:image/jpeg;base64,' . $imagenCodificada;
-	} else {
-		$userInfo = "";
-	}
+		require_once "../utils/dbConnection.php";
+		require_once "../model/user.php";
+	    if (!isset($_SESSION["userView"])){
+        	session_start();
+			if (isset($_SESSION["AUTH"])) {
+				$userInfo = $_SESSION["AUTH"];
+				$perfil = 'vendedor';
+				$imagenCodificada = base64_encode($userInfo["user_image"]);
+				$urlImagen = 'data:image/jpeg;base64,' . $imagenCodificada;
+			} else {
+				$userInfo = "";
+			}
+		}
+		else{
+			$userView = (int)$_SESSION["userView"];
+			$mysqli = dbConnection::connect();
+			$user = new User();
+			$userlogged = $user->selectOneUser($mysqli, $userView);
+			if($userlogged != null){
+				$userInfo = $userlogged;
+				$perfil = $userInfo['user_rol'];
+				$imagenCodificada = base64_encode($userInfo["user_image"]);
+				$urlImagen = 'data:image/jpeg;base64,' . $imagenCodificada;
+			}
+		}
+	
 
 	?>
 	<meta charset="UTF-8">
