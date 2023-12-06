@@ -1393,6 +1393,39 @@ BEGIN
 END$$
 DELIMITER ;
 
+/*------------------------------------STORED PROCEDURES DASHBOARD---------------------------------------*/
+DROP PROCEDURE IF EXISTS `getLastProducts`;
+DELIMITER $$
+CREATE PROCEDURE `getLastProducts`()
+BEGIN
+    SELECT * FROM `bytesandbits`.`Product` ORDER BY `product_createdAt` DESC LIMIT 15;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `GetMostLikedProducts`;
+DELIMITER $$
+CREATE PROCEDURE `GetMostLikedProducts`()
+BEGIN
+    SELECT p.*, COUNT(r.`rating_id`) AS like_count
+    FROM `bytesandbits`.`Product` AS p
+    LEFT JOIN `bytesandbits`.`Rating` AS r ON p.`product_id` = r.`rating_product`
+    GROUP BY p.`product_id`
+    ORDER BY like_count DESC LIMIT 15;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `GetMostSoldProducts`;
+DELIMITER $$
+CREATE PROCEDURE `GetMostSoldProducts`()
+BEGIN
+    SELECT p.*, COUNT(s.`sale_id`) AS sold_count
+    FROM `bytesandbits`.`Product`AS p
+    LEFT JOIN `bytesandbits`.`Sale` AS s ON p.`product_id` = s.`sale_product`
+    GROUP BY p.`product_id`
+    ORDER BY sold_count DESC LIMIT 15;
+END $$
+DELIMITER ;
+
 /* DROP PROCEDURE IF EXISTS `addSale`;
 DELIMITER $$
 CREATE PROCEDURE `addSale`(

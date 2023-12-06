@@ -1,4 +1,4 @@
 <?php
-session_start();
-include_once "./views/dashboard.php";
+    header("Location: ./backend/controllers/getDashboard.php");
+    exit();
 ?>

@@ -4,7 +4,7 @@
             $host = "localhost";
             $db = "bytesandbits";
             $user = "root";
-            $pass = "#Orjamoon29";
+            $pass = "admin";
             try {
                 $mysqli = new mysqli($host,$user,$pass,$db);
                 if ($mysqli->connect_errno) {
@@ -14,7 +14,7 @@
                 }
 
             } catch(Exception $e) {
-                $response = (object)array("status"=>500,"message"=>"Error a conectarse a la base de datos.");
+                $response = (object)array("status"=>500,"message"=>$e->getMessage());
                 echo json_encode($response);
                 exit;
             }

@@ -198,4 +198,64 @@ class Product
         }
         return null;
     }
+
+    public function getLastProducts($_mysqli)
+    {
+        $query = "CALL getLastProducts();";
+        try {
+            $stmt = $_mysqli->prepare($query);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            $lastProducts = array();
+            while ($row = $result->fetch_assoc()) {
+                $lastProducts[] = $row;
+            }
+            return $lastProducts;
+        } catch (Exception $e) {
+            $response = (object)array("status" => 500, "message" => $e->getMessage());
+            echo json_encode($response);
+            return null;
+        }
+    }
+
+    public function getMostLikedProducts($_mysqli)
+    {
+        $query = "CALL getMostLikedProducts();";
+        try {
+            $stmt = $_mysqli->prepare($query);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            $mostLikedProducts = array();
+            while ($row = $result->fetch_assoc()) {
+                $mostLikedProducts[] = $row;
+            }
+            return $mostLikedProducts;
+        } catch (Exception $e) {
+            $response = (object)array("status" => 500, "message" => $e->getMessage());
+            echo json_encode($response);
+            return null;
+        }
+    }
+
+    public function getMostSoldProducts($_mysqli)
+    {
+        $query = "CALL getMostSoldProducts();";
+        try {
+            $stmt = $_mysqli->prepare($query);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            $mostSoldProducts = array();
+            while ($row = $result->fetch_assoc()) {
+                $mostSoldProducts[] = $row;
+            }
+            return $mostSoldProducts;
+        } catch (Exception $e) {
+            $response = (object)array("status" => 500, "message" => $e->getMessage());
+            echo json_encode($response);
+            return null;
+        }
+    }
 }
