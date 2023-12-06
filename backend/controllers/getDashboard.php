@@ -18,8 +18,6 @@
         $_SESSION['last_products'] = $lastProducts;
         $_SESSION['most_liked_products'] = $mostLikedProducts;
         $_SESSION['most_sold_products'] = $mostSoldProducts;
-        echo "Éxito";
-        header("Location: ../views/dashboard.php");
         exit();
     } else {
         $_SESSION['last_products'] = null;
